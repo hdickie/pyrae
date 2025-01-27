@@ -1928,32 +1928,36 @@ class SearchResult(FromHTML):
                         article.conjugations = conjugations
 
             synonym_section = self._soup.find_all("section", attrs={"id": re.compile(r"^sinonimos")})
-            synonym_ul = synonym_section[0].find_all("ul", attrs={"class": "c-related-words"})
+                synonym_list = []
+                if len(synonym_section) > 0:
+                    synonym_ul = synonym_section[0].find_all("ul", attrs={"class": "c-related-words"})
 
-            synonym_list = []
-            for syn in synonym_ul[0].descendants:
-                if syn.name is None:
-                    syn_text = syn.text.replace(',','').replace('.','').strip().replace('0','')
-                    syn_text = syn_text.replace('1','').replace('2','').replace('3','')
-                    syn_text = syn_text.replace('4', '').replace('5', '').replace('6', '')
-                    syn_text = syn_text.replace('7', '').replace('8', '').replace('9', '')
-                    if syn_text != '':
-                        synonym_list.append(syn_text)
-            self.synonyms = synonym_list
+                    for syn in synonym_ul[0].descendants:
+                        if syn.name is None:
+                            syn_text = syn.text.replace(',','').replace('.','').strip().replace('0','')
+                            syn_text = syn_text.replace('1','').replace('2','').replace('3','')
+                            syn_text = syn_text.replace('4', '').replace('5', '').replace('6', '')
+                            syn_text = syn_text.replace('7', '').replace('8', '').replace('9', '')
+                            if syn_text != '':
+                                synonym_list.append(syn_text)
+                    # print(synonym_list)
+                    self.synonyms = synonym_list
 
-            antonym_section_section = self._soup.find_all("section", attrs={"id": re.compile(r"^antonimos")})
-            antonym_ul = antonym_section_section[0].find_all("ul", attrs={"class": "c-related-words"})
+                antonym_section_section = self._soup.find_all("section", attrs={"id": re.compile(r"^antonimos")})
+                antonym_list = []
+                if len(antonym_section_section) > 0:
+                    antonym_ul = antonym_section_section[0].find_all("ul", attrs={"class": "c-related-words"})
 
-            antonym_list = []
-            for ant in antonym_ul[0].descendants:
-                if ant.name is None:
-                    ant_text = ant.text.replace(',', '').replace('.', '').strip().replace('0', '')
-                    ant_text = ant_text.replace('1', '').replace('2', '').replace('3', '')
-                    ant_text = ant_text.replace('4', '').replace('5', '').replace('6', '')
-                    ant_text = ant_text.replace('7', '').replace('8', '').replace('9', '')
-                    if ant_text != '':
-                        antonym_list.append(ant_text)
-            self.antonyms = antonym_list
+
+                    for ant in antonym_ul[0].descendants:
+                        if ant.name is None:
+                            ant_text = ant.text.replace(',', '').replace('.', '').strip().replace('0', '')
+                            ant_text = ant_text.replace('1', '').replace('2', '').replace('3', '')
+                            ant_text = ant_text.replace('4', '').replace('5', '').replace('6', '')
+                            ant_text = ant_text.replace('7', '').replace('8', '').replace('9', '')
+                            if ant_text != '':
+                                antonym_list.append(ant_text)
+                self.antonyms = antonym_list
 
         self._parsed = True
 
